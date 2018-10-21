@@ -6,8 +6,7 @@ import store from './models';
 import { GlobalStyles, theme } from './styles';
 import strings from './locale';
 
-import MainView from './Main';
-
+import View from './View';
 class App extends Component {
   componentWillMount() {
     this.getLocale();
@@ -25,7 +24,7 @@ class App extends Component {
         <ThemeProvider theme={theme}>
           <div>
             <GlobalStyles />
-            <MainView />
+            <View />
           </div>
         </ThemeProvider>
       </Provider>
