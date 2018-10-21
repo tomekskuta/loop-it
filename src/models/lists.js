@@ -1,8 +1,9 @@
 import moment from 'moment';
 import { setId } from '../helpers';
 
-const List = ({ id, loopIt, color, endDate, cycleLength, cycleEnd }) => ({
+const List = ({ id, name, loopIt, color, endDate, cycleLength, cycleEnd }) => ({
   id,
+  name,
   created_at: moment().format('x'),
   updated_at: moment().format('x'),
   loopIt,

@@ -1,3 +1,3 @@
-import MainWrapper from './MainWrapper';
+import NoListsInfo from './NoListsInfo';
 
-export default { MainWrapper };
+export { NoListsInfo };

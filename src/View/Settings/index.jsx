@@ -43,8 +43,6 @@ class Settings extends Component {
     return (
       <div>
         <Language onChange={this.changeLanguage} value={language} />
-        <div>{strings.noLists}</div>
-        <div>{strings.getLanguage()}</div>
       </div>
     );
   }
