@@ -1,70 +1,52 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 
 import Header from './Header';
 import List from './List';
-import { NoListsInfo } from './components';
+import NewList from './NewList';
+import { NoListsInfo, MainView as MainViewComponent } from './components';
 
-const MainWrapper = styled.div`
-  width: 100vw;
-  min-height: 100vh;
-  background: ${props => (props.theme.colors ? props.theme.colors.mainBackground : '#fff')};
-  display: flex;
-  flex-direction: column;
-`;
+const MainView = ({ lists, getLists, getLocale }) => {
+  let listsRef = React.createRef();
 
-const ListsWrapper = styled.div`
-  height: 100%;
-  width: 100%;
-  flex-grow: 1;
-`;
+  const [isNewList, toggleNewList] = useState(false);
 
-class MainView extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { createNewList: false };
+  useEffect(() => {
+    getLists();
+    getLocale();
+  }, []);
 
-    this.lists = React.createRef();
-  }
+  const showNewList = event => !listsRef.current.contains(event.target) && toggleNewList(true);
 
-  componentDidMount() {
-    this.props.getLists();
-  }
+  const hideNewList = () => toggleNewList(false);
 
-  openNewList = event =>
-    !this.lists.current.contains(event.target) && this.setState({ createNewList: true });
+  const renderLists = () => {
+    const currentLists = lists.map(list => <List key={list.id} list={list} />);
+    return isNewList
+      ? [<NewList key="newList" hideNewList={hideNewList} />, ...currentLists]
+      : currentLists;
+  };
 
-  render() {
-    const { lists } = this.props;
-    return (
-      <MainWrapper>
-        <Header />
-        <ListsWrapper onClick={this.openNewList}>
-          <div ref={this.lists}>
-            {lists.map(list => (
-              <List key={list.id} list={list} />
-            ))}
-          </div>
-          {lists.length === 0 && <NoListsInfo />}
-        </ListsWrapper>
-      </MainWrapper>
-    );
-  }
-}
+  return (
+    <MainViewComponent header={<Header />} showNewList={showNewList}>
+      <div ref={listsRef}>{renderLists()}</div>
+      {lists.length === 0 && !isNewList && <NoListsInfo />}
+    </MainViewComponent>
+  );
+};
 
 MainView.propTypes = {
   lists: PropTypes.arrayOf(PropTypes.object).isRequired,
-  getLists: PropTypes.func.isRequired
+  getLists: PropTypes.func.isRequired,
+  getLocale: PropTypes.func.isRequired
 };
 
-const stateToProps = state => ({
-  lists: state.lists
-});
+const stateToProps = state => ({ lists: state.lists });
 
 const dispatchToProps = dispatch => ({
-  getLists: dispatch.lists.getLists
+  getLists: dispatch.lists.getLists,
+  getLocale: dispatch.locale.getLocale
 });
 
 export default connect(

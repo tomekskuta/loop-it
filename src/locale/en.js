@@ -1,5 +1,9 @@
 const en = {
-  noLists: "You don't have any lists. Click to add"
+  noLists: 'Click to add list',
+  newList: {
+    title: 'New list',
+    name: 'Name'
+  }
 };
 
 export default en;

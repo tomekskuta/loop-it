@@ -1,5 +1,9 @@
 const pl = {
-  noLists: 'Nie masz jeszcze żadnej listy. Kliknij, aby dodać'
+  noLists: 'Kliknij, aby dodać listę',
+  newList: {
+    title: 'Nowa lista',
+    name: 'Nazwa'
+  }
 };
 
 export default pl;
