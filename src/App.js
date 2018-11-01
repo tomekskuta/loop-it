@@ -5,7 +5,7 @@ import { ThemeProvider } from 'styled-components';
 import store from './models';
 import { GlobalStyles, theme } from './styles';
 
-import View from './view';
+import View from './hackDirectory';
 
 const App = () => (
   <Provider store={store}>
