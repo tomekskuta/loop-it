@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import strings from '../../locale';
+import { useT } from 'react-i18next/hooks';
 
 const Text = styled.h2`
   margin-top: 3em;
@@ -9,6 +9,9 @@ const Text = styled.h2`
   cursor: pointer;
 `;
 
-const NoListsInfo = () => <Text>{strings.noLists}</Text>;
+const NoListsInfo = () => {
+  const [t] = useT();
+  return <Text>{t('noLists')}</Text>;
+};
 
 export default NoListsInfo;

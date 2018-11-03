@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { Provider } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
+import './i18n.js';
 
 import store from './models';
 import { GlobalStyles, theme } from './styles';

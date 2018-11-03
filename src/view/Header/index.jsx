@@ -1,12 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 
-import strings from '../../locale';
+import { useT } from 'react-i18next/hooks';
 
 const Languages = styled.div`
   display: flex;
@@ -20,38 +18,26 @@ const Title = styled.h2`
   text-align: center;
 `;
 
-const Header = ({ setLocale, locale }) => (
-  <AppBar color="default" position="relative">
-    <Title>Loop it</Title>
-    <Languages>
-      {strings.getAvailableLanguages().map(lang => (
-        <Button
-          key={lang}
-          size="small"
-          onClick={() => setLocale(lang)}
-          variant={(locale === lang && 'outlined') || 'text'}
-        >
-          {lang}
-        </Button>
-      ))}
-    </Languages>
-  </AppBar>
-);
+const getLangButtons = i18n =>
+  ['en', 'pl'].map(lang => (
+    <Button
+      key={lang}
+      size="small"
+      onClick={() => i18n.changeLanguage(lang)}
+      variant={(i18n.language === lang && 'outlined') || 'text'}
+    >
+      {lang}
+    </Button>
+  ));
 
-Header.propTypes = {
-  setLocale: PropTypes.func.isRequired,
-  locale: PropTypes.string.isRequired
+const Header = () => {
+  const [, i18n] = useT();
+  return (
+    <AppBar color="default" position="relative">
+      <Title>Loop it</Title>
+      <Languages>{getLangButtons(i18n)}</Languages>
+    </AppBar>
+  );
 };
 
-const mapStateToProps = state => ({
-  locale: state.locale
-});
-
-const mapDispatchToProps = dispatch => ({
-  setLocale: lang => dispatch.locale.setLocale(lang)
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Header);
+export default Header;

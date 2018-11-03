@@ -3,14 +3,12 @@ import logger from 'redux-logger';
 
 import lists from './lists';
 import openedList from './openedList';
-import locale from './locale';
 
 const store = init({
   redux: {
     middlewares: [logger]
   },
   models: {
-    locale,
     lists,
     openedList
   }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -12,10 +12,7 @@ const MainView = ({ lists, getLists, getLocale }) => {
 
   const [isNewList, toggleNewList] = useState(false);
 
-  useEffect(() => {
-    getLists();
-    getLocale();
-  }, []);
+  useEffect(() => getLists(), []);
 
   const showNewList = event => !listsRef.current.contains(event.target) && toggleNewList(true);
 
@@ -29,25 +26,22 @@ const MainView = ({ lists, getLists, getLocale }) => {
   };
 
   return (
-    <MainViewComponent header={<Header />} showNewList={showNewList}>
-      <div ref={listsRef}>{renderLists()}</div>
-      {lists.length === 0 && !isNewList && <NoListsInfo />}
-    </MainViewComponent>
+    <Suspense fallback={<div>loading...</div>}>
+      <MainViewComponent header={<Header />} showNewList={showNewList}>
+        <div ref={listsRef}>{renderLists()}</div>
+        {lists.length === 0 && !isNewList && <NoListsInfo />}
+      </MainViewComponent>
+    </Suspense>
   );
 };
 
 MainView.propTypes = {
   lists: PropTypes.arrayOf(PropTypes.object).isRequired,
-  getLists: PropTypes.func.isRequired,
-  getLocale: PropTypes.func.isRequired
+  getLists: PropTypes.func.isRequired
 };
 
 const stateToProps = state => ({ lists: state.lists });
-
-const dispatchToProps = dispatch => ({
-  getLists: dispatch.lists.getLists,
-  getLocale: dispatch.locale.getLocale
-});
+const dispatchToProps = dispatch => ({ getLists: dispatch.lists.getLists });
 
 export default connect(
   stateToProps,
