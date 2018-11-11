@@ -10,25 +10,34 @@ const MainWrapper = styled.div`
   flex-direction: column;
 `;
 
-const ListsWrapper = styled.div`
+const ContentWrapper = styled.div`
   height: 100%;
   flex-grow: 1;
-  display: flex;
   padding: 2em;
   cursor: ${({ isNewListOpen }) => (isNewListOpen ? 'default' : 'pointer')};
 `;
 
-const MainView = ({ header, children, showNewList }) => (
+const ListsWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+const MainView = ({ header, children, showNewList, listsRef, noListsInfo }) => (
   <MainWrapper>
     {header}
-    <ListsWrapper onClick={showNewList}>{children}</ListsWrapper>
+    <ContentWrapper onClick={showNewList}>
+      <ListsWrapper ref={listsRef}>{children}</ListsWrapper>
+      {noListsInfo}
+    </ContentWrapper>
   </MainWrapper>
 );
 
 MainView.propTypes = {
   header: PropTypes.node.isRequired,
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.array]).isRequired,
-  showNewList: PropTypes.func.isRequired
+  showNewList: PropTypes.func.isRequired,
+  listsRef: PropTypes.shape({ current: PropTypes.object }).isRequired,
+  noListsInfo: PropTypes.node.isRequired
 };
 
 export default MainView;

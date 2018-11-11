@@ -7,7 +7,7 @@ import List from './List';
 import NewList from './NewList';
 import { NoListsInfo, MainView as MainViewComponent } from './components';
 
-const MainView = ({ lists, getLists, getLocale }) => {
+const MainView = ({ lists, getLists }) => {
   let listsRef = React.createRef();
 
   const [isNewList, toggleNewList] = useState(false);
@@ -27,9 +27,13 @@ const MainView = ({ lists, getLists, getLocale }) => {
 
   return (
     <Suspense fallback={<div>loading...</div>}>
-      <MainViewComponent header={<Header />} showNewList={showNewList}>
-        <div ref={listsRef}>{renderLists()}</div>
-        {lists.length === 0 && !isNewList && <NoListsInfo />}
+      <MainViewComponent
+        header={<Header />}
+        showNewList={showNewList}
+        listsRef={listsRef}
+        noListsInfo={lists.length === 0 && !isNewList && <NoListsInfo />}
+      >
+        {renderLists()}
       </MainViewComponent>
     </Suspense>
   );

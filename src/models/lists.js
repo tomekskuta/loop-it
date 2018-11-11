@@ -1,34 +1,28 @@
 import moment from 'moment';
-import { setId } from '../helpers';
+import { setId, List } from '../helpers';
 
-const List = ({ id, name, loopIt, color, endDate, cycleLength, cycleEnd }) => ({
-  id,
-  name,
-  created_at: moment().format('x'),
-  updated_at: moment().format('x'),
-  loopIt,
-  endDate,
-  cycleLength,
-  cycleEnd,
-  color
-});
+const getLists = () => JSON.parse(localStorage.getItem('lists')) || [];
+
+const addList = (state, list) => {
+  const id = setId(state);
+  const nextCycleStart = moment(list.startDate)
+    .add(list.cycleLength.value, list.cycleLength.period)
+    .format('YYYY-MM-DD');
+
+  const newList = new List({ id, ...list, nextCycleStart });
+  const lists = [newList, ...state];
+
+  localStorage.setItem('lists', JSON.stringify(lists));
+  return lists;
+};
 
 const lists = {
   state: [],
   reducers: {
-    getLists: () => JSON.parse(localStorage.getItem('lists')) || [],
-    addList: (state, lists) => lists,
-    addTask: (state, lists) => lists,
-    editTask: (state, lists) => lists
-  },
-  effects: {
-    createList(data, state) {
-      const id = setId(state.lists);
-      const newList = new List({ id, ...data });
-      const lists = [newList, ...state.lists];
-      localStorage.setItem('lists', JSON.stringify(lists));
-      this.addList(lists);
-    }
+    getLists,
+    addList,
+    addTask: (state, lists) => state,
+    editTask: (state, lists) => state
   }
 };
 

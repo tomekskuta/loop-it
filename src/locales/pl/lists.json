@@ -1,4 +1,13 @@
 {
   "newListHeader": "Nowa lista",
-  "name": "Nazwa"
+  "Name": "Nazwa",
+  "Cycle length": "Długość cyklu",
+  "periods": {
+    "days": "dni",
+    "weeks": "tygodni",
+    "months": "miesięcy"
+  },
+  "Cycle start": "Start cyklu",
+  "add": "dodaj",
+  "fields required": "pola wymagane"
 }

@@ -8,15 +8,18 @@ import locales from './locales';
 const defaultNameSpace = 'general';
 
 const handleLanguage = error => {
-  const langs = i18n.languages;
-  const lang = i18n.language;
   if (error) console.log(error);
-  if (langs[0] === lang) return;
+
+  const isLang = locale => locale === 'en' || locale === 'pl';
+
+  const lang = i18n.language;
+  if (isLang(lang)) return;
 
   const shortLang = lang.split('-')[0];
-  const hasResource = i18n.hasResourceBundle(shortLang, defaultNameSpace);
   const changeLang = lang => i18n.changeLanguage(lang);
-  return (hasResource && changeLang(shortLang)) || changeLang('en');
+  if (isLang(shortLang)) return changeLang(shortLang);
+
+  return changeLang('en');
 };
 
 i18n
