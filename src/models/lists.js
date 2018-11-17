@@ -1,13 +1,12 @@
-import moment from 'moment';
-import { setId, List } from '../helpers';
+import format from 'date-fns/format';
+
+import { setId, List, setNextCycleStart } from '../helpers';
 
 const getLists = () => JSON.parse(localStorage.getItem('lists')) || [];
 
 const addList = (state, list) => {
   const id = setId(state);
-  const nextCycleStart = moment(list.startDate)
-    .add(list.cycleLength.value, list.cycleLength.period)
-    .format('YYYY-MM-DD');
+  const nextCycleStart = format(setNextCycleStart(list.startDate, list.cycleLength));
 
   const newList = new List({ id, ...list, nextCycleStart });
   const lists = [newList, ...state];

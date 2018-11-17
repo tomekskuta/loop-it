@@ -1,4 +1,7 @@
-import moment from 'moment';
+import format from 'date-fns/format';
+import addDays from 'date-fns/add_days';
+import addWeeks from 'date-fns/add_weeks';
+import addMonths from 'date-fns/add_months';
 
 export const setId = elements => {
   if (!elements || elements.length === 0) return 1;
@@ -7,10 +10,16 @@ export const setId = elements => {
 };
 
 export const cyclePeriods = [
-  { value: 'd', label: 'days' },
-  { value: 'w', label: 'weeks' },
+  { value: 'D', label: 'days' },
+  { value: 'W', label: 'weeks' },
   { value: 'M', label: 'months' }
 ];
+
+export const setNextCycleStart = (date, { count, period }) => {
+  if (period === 'D') return addDays(date, count);
+  if (period === 'W') return addWeeks(date, count);
+  return addMonths(date, count);
+};
 
 export const List = ({
   id,
@@ -24,8 +33,8 @@ export const List = ({
 }) => ({
   id,
   name,
-  created_at: moment().format('YYYY-MM-DD HH:mm'),
-  updated_at: moment().format('YYYY-MM-DD HH:mm'),
+  created_at: format(new Date()),
+  updated_at: format(new Date()),
   cycleLength,
   startDate,
   nextCycleStart,
@@ -38,7 +47,7 @@ export const List = ({
 export const Task = ({ id, name }) => ({
   id,
   name,
-  created_at: moment().format('YYYY-MM-DD HH:mm'),
-  updated_at: moment().format('YYYY-MM-DD HH:mm'),
+  created_at: format(new Date()),
+  updated_at: format(new Date()),
   done: false
 });

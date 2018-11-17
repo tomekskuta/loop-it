@@ -1,29 +1,24 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
 import { useT } from 'react-i18next/hooks';
-import moment from 'moment';
+import format from 'date-fns/format';
 
 import Form from './Form';
-import { Card, CardHeader, CardContent } from '@material-ui/core';
+import ListWrapper from '../components/ListWrapper';
 
 import { cyclePeriods } from '../../helpers';
-
-const StyledCard = styled(Card)`
-  cursor: default;
-`;
 
 const NewList = ({ addList }) => {
   const [t] = useT('lists');
 
-  const [period, setPeriod] = useState('d');
+  const [period, setPeriod] = useState('D');
 
   const resetForm = event => {
     event.target.name.value = '';
     event.target.cycleLength.value = 1;
-    setPeriod('d');
-    event.target.startDate.value = moment().format('YYYY-MM-DD');
+    setPeriod('D');
+    event.target.startDate.value = format(new Date(), 'YYYY-MM-DD');
   };
 
   const handleSubmit = event => {
@@ -31,7 +26,7 @@ const NewList = ({ addList }) => {
     const newList = {
       name: event.target.name.value,
       cycleLength: {
-        value: event.target.cycleLength.value,
+        count: event.target.cycleLength.value,
         period
       },
       startDate: event.target.startDate.value
@@ -47,17 +42,14 @@ const NewList = ({ addList }) => {
   ));
 
   return (
-    <StyledCard>
-      <CardHeader title={t('newListHeader')} />
-      <CardContent>
-        <Form
-          submit={handleSubmit}
-          currentPeriod={period}
-          setPeriod={e => setPeriod(e.target.value)}
-          periodOptions={renderLengthOptions}
-        />
-      </CardContent>
-    </StyledCard>
+    <ListWrapper title={t('newListHeader')}>
+      <Form
+        submit={handleSubmit}
+        currentPeriod={period}
+        setPeriod={e => setPeriod(e.target.value)}
+        periodOptions={renderLengthOptions}
+      />
+    </ListWrapper>
   );
 };
 

@@ -1,14 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class List extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-  render() {
-    const { list } = this.props;
-    return <div>{list.name}</div>;
-  }
-}
+import ListWrapper from '../components/ListWrapper';
+
+const List = ({ list }) => {
+  return (
+    <ListWrapper title={list.name} subheader={list.nextCycleStart}>
+      {list.name}
+    </ListWrapper>
+  );
+};
 
 export default List;
