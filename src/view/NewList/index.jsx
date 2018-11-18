@@ -7,7 +7,7 @@ import format from 'date-fns/format';
 import Form from './Form';
 import ListWrapper from '../components/ListWrapper';
 
-import { cyclePeriods } from '../../helpers';
+import { CYCLE_PERIODS } from '../../helpers/constants';
 
 const NewList = ({ addList }) => {
   const [t] = useT('lists');
@@ -35,7 +35,7 @@ const NewList = ({ addList }) => {
     resetForm(event);
   };
 
-  const renderLengthOptions = cyclePeriods.map(periodOption => (
+  const renderLengthOptions = CYCLE_PERIODS.map(periodOption => (
     <option key={periodOption.value} value={periodOption.value}>
       {t(`periods.${periodOption.label}`)}
     </option>
