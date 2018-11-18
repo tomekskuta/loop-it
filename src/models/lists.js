@@ -32,12 +32,13 @@ const addTask = (state, task) => {
   return updatedLists;
 };
 
-const setTaskDone = (state, taskData) => {
-  const { done, taskId, listId } = taskData;
+const editTask = (state, taskData) => {
+  const { value, editedProperty, taskId, listId } = taskData;
   const currentList = state.find(list => list.id === listId);
   const currentTask = currentList.tasks.find(task => task.id === taskId);
 
-  const updatedTask = { ...currentTask, done, updated_at: getNow() };
+  const updatedTask = { ...currentTask, updated_at: getNow() };
+  updatedTask[editedProperty] = value;
   const updatedTasks = currentList.tasks.map(task => (task.id === taskId ? updatedTask : task));
   const updatedList = { ...currentList, tasks: updatedTasks, updated_at: getNow() };
   const updatedLists = state.map(list => (list.id === listId ? updatedList : list));
@@ -52,8 +53,7 @@ const lists = {
     getLists,
     addList,
     addTask,
-    setTaskDone,
-    editTask: (state, lists) => state
+    editTask
   }
 };
 

@@ -14,7 +14,7 @@ import { AddTask, Task } from './components';
 
 const locale = { en, pl };
 
-const ExistList = ({ list, tasks, addTask, setTaskDone }) => {
+const ExistList = ({ list, tasks, addTask, editTask }) => {
   const { id, name, cycleLength, nextCycleStart } = list;
 
   const [t, i18n] = useT('lists');
@@ -35,17 +35,24 @@ const ExistList = ({ list, tasks, addTask, setTaskDone }) => {
     event.target.text.value = '';
   };
 
-  // const handleSetTaskDone = (checked, taskId) => {
-  //   const taskData = { checked, taskId, listId: id };
-  //   setTaskDone(taskData);
-  // };
+  const handleSetTaskDone = (value, taskId) => {
+    const taskData = { editedProperty: 'done', value, taskId, listId: id };
+    editTask(taskData);
+  };
+
+  const handleChangeTaskText = (event, taskId) => {
+    event.preventDefault();
+    const taskData = { editedProperty: 'text', value: event.target.text.value, taskId, listId: id };
+    editTask(taskData);
+  };
 
   const renderTasks = () =>
     tasks.map(task => (
       <Task
         key={task.id}
         task={task}
-        setDone={(e, done) => setTaskDone({ done, taskId: task.id, listId: id })}
+        setDone={(e, done) => handleSetTaskDone(done, task.id)}
+        changeText={event => handleChangeTaskText(event, task.id)}
       />
     ));
 
@@ -71,12 +78,13 @@ ExistList.propTypes = {
     tasks: PropTypes.array
   }).isRequired,
   tasks: PropTypes.arrayOf(PropTypes.object).isRequired,
-  addTask: PropTypes.func.isRequired
+  addTask: PropTypes.func.isRequired,
+  editTask: PropTypes.func.isRequired
 };
 
 const mapDispatchToProps = dispatch => ({
   addTask: dispatch.lists.addTask,
-  setTaskDone: dispatch.lists.setTaskDone
+  editTask: dispatch.lists.editTask
 });
 
 export default connect(

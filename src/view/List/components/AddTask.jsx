@@ -10,7 +10,7 @@ const AddTask = ({ addTask }) => {
         <Button type="submit" size="small">
           +
         </Button>
-        <Input name="text" type="text" required />
+        <Input name="text" required />
       </form>
     </ListItem>
   );
