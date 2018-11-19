@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import distanceInWords from 'date-fns/distance_in_words';
@@ -8,9 +8,12 @@ import en from 'date-fns/locale/en';
 import pl from 'date-fns/locale/pl';
 
 import List from '@material-ui/core/List';
+import IconButton from '@material-ui/core/IconButton';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import CloseIcon from '@material-ui/icons/Close';
 
 import ListWrapper from '../components/ListWrapper';
-import { AddTask, Task } from './components';
+import { AddTask, Task, ListMenu } from './components';
 
 const locale = { en, pl };
 
@@ -18,6 +21,8 @@ const ExistList = ({ list, tasks, addTask, editTask }) => {
   const { id, name, cycleLength, nextCycleStart } = list;
 
   const [t, i18n] = useT('lists');
+
+  const [isMenu, showMenu] = useState(false);
 
   const timeToNextCycle =
     !(cycleLength.period === 'D' && cycleLength.count === '1') &&
@@ -57,11 +62,23 @@ const ExistList = ({ list, tasks, addTask, editTask }) => {
     ));
 
   return (
-    <ListWrapper title={name} subheader={timeToNextCycle}>
-      <List disablePadding>
-        {renderTasks()}
-        <AddTask addTask={handleAddTask} />
-      </List>
+    <ListWrapper
+      title={name}
+      subheader={timeToNextCycle}
+      actionButton={
+        <IconButton onClick={() => showMenu(!isMenu)}>
+          {isMenu ? <CloseIcon /> : <MoreVertIcon />}
+        </IconButton>
+      }
+    >
+      {isMenu ? (
+        <ListMenu />
+      ) : (
+        <List disablePadding>
+          {renderTasks()}
+          <AddTask addTask={handleAddTask} />
+        </List>
+      )}
     </ListWrapper>
   );
 };

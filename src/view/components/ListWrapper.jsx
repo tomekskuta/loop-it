@@ -9,9 +9,9 @@ const CardWrapper = styled(Card)`
   margin: 1em;
 `;
 
-const ListWrapper = ({ children, title, subheader }) => (
+const ListWrapper = ({ children, title, subheader, actionButton }) => (
   <CardWrapper>
-    <CardHeader title={title} subheader={subheader} />
+    <CardHeader title={title} subheader={subheader} action={actionButton} />
     <CardContent>{children}</CardContent>
   </CardWrapper>
 );
@@ -19,11 +19,13 @@ const ListWrapper = ({ children, title, subheader }) => (
 ListWrapper.propTypes = {
   children: PropTypes.node.isRequired,
   title: PropTypes.node.isRequired,
-  subheader: PropTypes.oneOfType([PropTypes.string, PropTypes.node])
+  subheader: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+  actionButton: PropTypes.node
 };
 
 ListWrapper.defaultProps = {
-  subheader: null
+  subheader: null,
+  action: null
 };
 
 export default ListWrapper;
