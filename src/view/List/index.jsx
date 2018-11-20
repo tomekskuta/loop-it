@@ -7,18 +7,19 @@ import { useT } from 'react-i18next/hooks';
 import en from 'date-fns/locale/en';
 import pl from 'date-fns/locale/pl';
 
-import List from '@material-ui/core/List';
-import IconButton from '@material-ui/core/IconButton';
+import { List, IconButton, Input } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import CloseIcon from '@material-ui/icons/Close';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 import ListWrapper from '../components/ListWrapper';
 import { AddTask, Task, ListMenu } from './components';
 
+import { CYCLE_PERIODS } from '../../helpers/constants';
+
 const locale = { en, pl };
 
 const ExistList = ({ list, tasks, addTask, editTask }) => {
-  const { id, name, cycleLength, nextCycleStart } = list;
+  const { id, name, cycleLength, nextCycleStart, startDate } = list;
 
   const [t, i18n] = useT('lists');
 
@@ -61,18 +62,33 @@ const ExistList = ({ list, tasks, addTask, editTask }) => {
       />
     ));
 
+  const renderLengthOptions = CYCLE_PERIODS.map(periodOption => (
+    <option key={periodOption.value} value={periodOption.value}>
+      {t(`periods.${periodOption.label}`)}
+    </option>
+  ));
+
   return (
     <ListWrapper
-      title={name}
+      title={<Input defaultValue={name} name="text" required />}
       subheader={timeToNextCycle}
       actionButton={
         <IconButton onClick={() => showMenu(!isMenu)}>
-          {isMenu ? <CloseIcon /> : <MoreVertIcon />}
+          {isMenu ? <ArrowBackIcon /> : <MoreVertIcon />}
         </IconButton>
       }
     >
       {isMenu ? (
-        <ListMenu />
+        <ListMenu
+          deleteList={() => console.log('delete', id)}
+          periodOptions={renderLengthOptions}
+          cycleLength={cycleLength.count}
+          setCycleLength={() => console.log('cycleLength')}
+          currentPeriod={cycleLength.period}
+          setPeriod={() => console.log('setPeriod', id)}
+          startDate={startDate}
+          setStartDate={() => console.log('startDate')}
+        />
       ) : (
         <List disablePadding>
           {renderTasks()}

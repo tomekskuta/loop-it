@@ -9,9 +9,17 @@ const CardWrapper = styled(Card)`
   margin: 1em;
 `;
 
+const SubheaderWrapper = styled.div`
+  margin-top: 1em;
+`;
+
 const ListWrapper = ({ children, title, subheader, actionButton }) => (
   <CardWrapper>
-    <CardHeader title={title} subheader={subheader} action={actionButton} />
+    <CardHeader
+      title={title}
+      subheader={<SubheaderWrapper>{subheader}</SubheaderWrapper>}
+      action={actionButton}
+    />
     <CardContent>{children}</CardContent>
   </CardWrapper>
 );
