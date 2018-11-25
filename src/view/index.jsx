@@ -2,35 +2,30 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import Header from './Header';
 import List from './List';
 import NewList from './NewList';
-import { NoListsInfo, MainView as MainViewComponent } from './components';
+import { MainView as MainViewComponent } from './components';
 
 const MainView = ({ lists, getLists }) => {
-  let listsRef = React.createRef();
-
   const [isNewList, toggleNewList] = useState(false);
 
   useEffect(getLists, []);
 
-  const showNewList = event => !listsRef.current.contains(event.target) && toggleNewList(true);
-
   const hideNewList = () => toggleNewList(false);
+
+  const shouldShowNewList = () => isNewList || lists.length === 0;
 
   const renderLists = () => {
     const currentLists = lists.map(list => <List key={list.id} list={list} tasks={list.tasks} />);
-    return isNewList
+    return shouldShowNewList()
       ? [<NewList key="newList" hideNewList={hideNewList} />, ...currentLists]
       : currentLists;
   };
 
   return (
     <MainViewComponent
-      header={<Header />}
-      showNewList={showNewList}
-      listsRef={listsRef}
-      noListsInfo={lists.length === 0 && !isNewList && <NoListsInfo />}
+      showNewList={() => toggleNewList(true)}
+      newListButtonDisabled={shouldShowNewList()}
     >
       {renderLists()}
     </MainViewComponent>

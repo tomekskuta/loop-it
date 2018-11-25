@@ -1,6 +1,6 @@
-import NoListsInfo from './NoListsInfo';
 import MainView from './MainView';
+import AppHeader from './AppHeader';
 import ListWrapper from './ListWrapper';
 import Modal from './Modal';
 
-export { NoListsInfo, MainView, ListWrapper, Modal };
+export { MainView, ListWrapper, Modal, AppHeader };
