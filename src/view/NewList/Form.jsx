@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { useT } from 'react-i18next/hooks';
-import moment from 'moment';
+import format from 'date-fns/format';
 
 import { TextField, Button, FormGroup, Select } from '@material-ui/core';
 
@@ -38,7 +38,7 @@ const Form = ({ submit, periodOptions, currentPeriod, setPeriod }) => {
           name="startDate"
           type="date"
           label={t('Cycle start')}
-          defaultValue={moment().format('YYYY-MM-DD')}
+          defaultValue={format(new Date(), 'YYYY-MM-DD')}
           required
         />
       </Row>

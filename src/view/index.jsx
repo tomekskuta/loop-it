@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -12,30 +12,28 @@ const MainView = ({ lists, getLists }) => {
 
   const [isNewList, toggleNewList] = useState(false);
 
-  useEffect(() => getLists(), []);
+  useEffect(getLists, []);
 
   const showNewList = event => !listsRef.current.contains(event.target) && toggleNewList(true);
 
   const hideNewList = () => toggleNewList(false);
 
   const renderLists = () => {
-    const currentLists = lists.map(list => <List key={list.id} list={list} />);
+    const currentLists = lists.map(list => <List key={list.id} list={list} tasks={list.tasks} />);
     return isNewList
       ? [<NewList key="newList" hideNewList={hideNewList} />, ...currentLists]
       : currentLists;
   };
 
   return (
-    <Suspense fallback={<div>loading...</div>}>
-      <MainViewComponent
-        header={<Header />}
-        showNewList={showNewList}
-        listsRef={listsRef}
-        noListsInfo={lists.length === 0 && !isNewList && <NoListsInfo />}
-      >
-        {renderLists()}
-      </MainViewComponent>
-    </Suspense>
+    <MainViewComponent
+      header={<Header />}
+      showNewList={showNewList}
+      listsRef={listsRef}
+      noListsInfo={lists.length === 0 && !isNewList && <NoListsInfo />}
+    >
+      {renderLists()}
+    </MainViewComponent>
   );
 };
 
