@@ -11,25 +11,33 @@ import { List, IconButton, Input } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
-import ListWrapper from '../components/ListWrapper';
+import { ListWrapper, Modal } from '../components';
 import { AddTask, Task, ListMenu } from './components';
 
 import { CYCLE_PERIODS } from '../../helpers/constants';
 
 const locale = { en, pl };
 
-const ExistList = ({ list, tasks, addTask, editTask }) => {
+const ExistList = ({ list, tasks, addTask, editTask, editList, deleteList }) => {
   const { id, name, cycleLength, nextCycleStart, startDate } = list;
 
   const [t, i18n] = useT('lists');
 
-  const [isMenu, showMenu] = useState(false);
+  const [isMenu, toggleMenu] = useState(false);
+  const [isModal, toggleModal] = useState(false);
 
   const timeToNextCycle =
     !(cycleLength.period === 'D' && cycleLength.count === '1') &&
     `${t('Next cycle in')} ${distanceInWords(new Date(), nextCycleStart, {
       locale: locale[i18n.language]
     })}`;
+
+  const handleEditList = (value, editedProperty) => editList({ id, editedProperty, value });
+
+  const handleEditName = event => {
+    event.preventDefault();
+    handleEditList(event.target.name.value, 'name');
+  };
 
   const handleAddTask = event => {
     event.preventDefault();
@@ -70,24 +78,28 @@ const ExistList = ({ list, tasks, addTask, editTask }) => {
 
   return (
     <ListWrapper
-      title={<Input defaultValue={name} name="text" required />}
+      title={
+        <form onSubmit={handleEditName}>
+          <Input defaultValue={name} name="name" required />
+        </form>
+      }
       subheader={timeToNextCycle}
       actionButton={
-        <IconButton onClick={() => showMenu(!isMenu)}>
+        <IconButton onClick={() => toggleMenu(!isMenu)}>
           {isMenu ? <ArrowBackIcon /> : <MoreVertIcon />}
         </IconButton>
       }
     >
       {isMenu ? (
         <ListMenu
-          deleteList={() => console.log('delete', id)}
+          deleteList={() => toggleModal(true)}
           periodOptions={renderLengthOptions}
           cycleLength={cycleLength.count}
-          setCycleLength={() => console.log('cycleLength')}
+          setCycleLength={e => handleEditList(e.target.value, ['cycleLength', 'count'])}
           currentPeriod={cycleLength.period}
-          setPeriod={() => console.log('setPeriod', id)}
+          setPeriod={e => handleEditList(e.target.value, ['cycleLength', 'period'])}
           startDate={startDate}
-          setStartDate={() => console.log('startDate')}
+          setStartDate={e => handleEditList(e.target.value, 'startDate')}
         />
       ) : (
         <List disablePadding>
@@ -95,6 +107,13 @@ const ExistList = ({ list, tasks, addTask, editTask }) => {
           <AddTask addTask={handleAddTask} />
         </List>
       )}
+      <Modal
+        open={isModal}
+        onClose={() => toggleModal(false)}
+        onSubmit={() => deleteList(id)}
+        contentText={t('Are you sure?')}
+        submitText={t('delete')}
+      />
     </ListWrapper>
   );
 };
@@ -112,12 +131,16 @@ ExistList.propTypes = {
   }).isRequired,
   tasks: PropTypes.arrayOf(PropTypes.object).isRequired,
   addTask: PropTypes.func.isRequired,
-  editTask: PropTypes.func.isRequired
+  editTask: PropTypes.func.isRequired,
+  editList: PropTypes.func.isRequired,
+  deleteList: PropTypes.func.isRequired
 };
 
 const mapDispatchToProps = dispatch => ({
+  editList: dispatch.lists.editList,
   addTask: dispatch.lists.addTask,
-  editTask: dispatch.lists.editTask
+  editTask: dispatch.lists.editTask,
+  deleteList: dispatch.lists.deleteList
 });
 
 export default connect(

@@ -11,5 +11,7 @@
   "add": "add",
   "fields required": "fields required",
   "Next cycle in": "Next cycle in",
-  "delete list": "delete list"
+  "delete list": "delete list",
+  "Are you sure?": "Are you sure?",
+  "delete": "delete"
 }

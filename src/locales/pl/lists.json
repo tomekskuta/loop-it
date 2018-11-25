@@ -11,5 +11,7 @@
   "add": "dodaj",
   "fields required": "pola wymagane",
   "Next cycle in": "Następny cykl za",
-  "delete list": "usuń listę"
+  "delete list": "usuń listę",
+  "Are you sure?": "Jesteś pewien?",
+  "delete": "usuń"
 }

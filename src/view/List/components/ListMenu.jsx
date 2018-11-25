@@ -25,7 +25,7 @@ const ListMenu = ({
   startDate,
   setStartDate
 }) => {
-  const [t, i18n] = useT('lists');
+  const [t] = useT('lists');
 
   return (
     <Fragment>
@@ -68,7 +68,7 @@ const ListMenu = ({
 ListMenu.propTypes = {
   deleteList: PropTypes.func.isRequired,
   periodOptions: PropTypes.arrayOf(PropTypes.node).isRequired,
-  cycleLength: PropTypes.number.isRequired,
+  cycleLength: PropTypes.string.isRequired,
   setCycleLength: PropTypes.func.isRequired,
   currentPeriod: PropTypes.string.isRequired,
   setPeriod: PropTypes.func.isRequired,
