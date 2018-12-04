@@ -1,20 +1,45 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-import { ListItem, ListItemSecondaryAction, Checkbox, Input } from '@material-ui/core';
+import { ListItem, ListItemSecondaryAction, Checkbox, Input, IconButton } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
 
-const Task = ({ task, setDone, changeText }) => {
+const StyledListItem = styled(ListItem)`
+  &:first-child {
+    padding: 0.5em 0;
+  }
+`;
+
+const StyledSecondaryAction = styled(ListItemSecondaryAction)`
+  display: flex;
+`;
+
+const StyledInput = styled(Input)`
+  width: 120px;
+`;
+
+const StyledIconButton = styled(IconButton)`
+  ${StyledListItem}:hover & {
+    visibility: visible;
+  }
+`;
+
+const Task = ({ task, setDone, changeText, deleteTask }) => {
   const { text, done } = task;
 
   return (
-    <ListItem>
+    <StyledListItem>
       <Checkbox checked={done} onChange={setDone} />
-      <ListItemSecondaryAction>
+      <StyledSecondaryAction>
         <form onSubmit={changeText}>
-          <Input defaultValue={text} name="text" required />
+          <StyledInput defaultValue={text} name="text" required />
         </form>
-      </ListItemSecondaryAction>
-    </ListItem>
+        <StyledIconButton onClick={deleteTask}>
+          <DeleteIcon />
+        </StyledIconButton>
+      </StyledSecondaryAction>
+    </StyledListItem>
   );
 };
 
@@ -27,7 +52,8 @@ Task.propTypes = {
     done: PropTypes.bool
   }).isRequired,
   setDone: PropTypes.func.isRequired,
-  changeText: PropTypes.func.isRequired
+  changeText: PropTypes.func.isRequired,
+  deleteTask: PropTypes.func.isRequired
 };
 
 export default Task;

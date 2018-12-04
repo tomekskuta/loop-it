@@ -69,9 +69,19 @@ const editTask = (state, taskData) => {
   return updatedLists;
 };
 
+const deleteTask = (state, taskData) => {
+  const { taskId, listId } = taskData;
+  const currentList = state.find(list => list.id === listId);
+  currentList.tasks = currentList.tasks.filter(task => task.id !== taskId);
+  const updatedLists = state.map(list => (list.id === listId ? currentList : list));
+
+  setStorageItem('lists', updatedLists);
+  return updatedLists;
+};
+
 const lists = {
   state: [],
-  reducers: { getLists, addList, editList, deleteList, addTask, editTask }
+  reducers: { getLists, addList, editList, deleteList, addTask, editTask, deleteTask }
 };
 
 export default lists;

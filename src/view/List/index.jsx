@@ -18,7 +18,7 @@ import { CYCLE_PERIODS } from '../../helpers/constants';
 
 const locale = { en, pl };
 
-const ExistList = ({ list, tasks, addTask, editTask, editList, deleteList }) => {
+const ExistList = ({ list, tasks, addTask, editTask, deleteTask, editList, deleteList }) => {
   const { id, name, cycleLength, nextCycleStart, startDate } = list;
 
   const [t, i18n] = useT('lists');
@@ -60,6 +60,11 @@ const ExistList = ({ list, tasks, addTask, editTask, editList, deleteList }) => 
     editTask(taskData);
   };
 
+  const handleDeleteTask = taskId => {
+    const taskData = { taskId, listId: id };
+    deleteTask(taskData);
+  };
+
   const renderTasks = () =>
     tasks.map(task => (
       <Task
@@ -67,6 +72,7 @@ const ExistList = ({ list, tasks, addTask, editTask, editList, deleteList }) => 
         task={task}
         setDone={(e, done) => handleSetTaskDone(done, task.id)}
         changeText={event => handleChangeTaskText(event, task.id)}
+        deleteTask={() => handleDeleteTask(task.id)}
       />
     ));
 
@@ -132,6 +138,7 @@ ExistList.propTypes = {
   tasks: PropTypes.arrayOf(PropTypes.object).isRequired,
   addTask: PropTypes.func.isRequired,
   editTask: PropTypes.func.isRequired,
+  deleteTask: PropTypes.func.isRequired,
   editList: PropTypes.func.isRequired,
   deleteList: PropTypes.func.isRequired
 };
@@ -139,6 +146,7 @@ ExistList.propTypes = {
 const mapDispatchToProps = dispatch => ({
   editList: dispatch.lists.editList,
   addTask: dispatch.lists.addTask,
+  deleteTask: dispatch.lists.deleteTask,
   editTask: dispatch.lists.editTask,
   deleteList: dispatch.lists.deleteList
 });
