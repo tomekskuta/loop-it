@@ -1,14 +1,32 @@
-import format from 'date-fns/format';
+import isFuture from 'date-fns/is_future';
 
 import { List, Task } from '../helpers/constructors';
 import { getStorageItem, setStorageItem } from '../helpers/localStorage';
 import { setId, setNextCycleStart, getNow } from '../helpers/methods';
 
-const getLists = () => getStorageItem('lists') || [];
+const getLists = () => {
+  const currentLists = getStorageItem('lists') || [];
+  const updatedLists = currentLists.map(list => {
+    const { nextCycleStart, tasks } = list;
+    if (!isFuture(nextCycleStart)) {
+      const updatedTasks = tasks.map(task => ({ ...task, done: false }));
+      return {
+        ...list,
+        nextCycleStart: setNextCycleStart(nextCycleStart, list.cycleLength),
+        tasks: updatedTasks,
+        updated_at: getNow()
+      };
+    }
+    return list;
+  });
+
+  setStorageItem('lists', updatedLists);
+  return updatedLists;
+};
 
 const addList = (state, list) => {
   const id = setId(state);
-  const nextCycleStart = format(setNextCycleStart(list.startDate, list.cycleLength));
+  const nextCycleStart = setNextCycleStart(list.startDate, list.cycleLength);
 
   const newList = new List({ id, ...list, nextCycleStart });
   const lists = [newList, ...state];
